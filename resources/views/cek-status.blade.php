@@ -50,6 +50,10 @@
                                 <span id="res-berat">—</span>
                             </div>
                             <div class="result-item">
+                                <label>Total Saldo (Berat)</label>
+                                <span id="res-saldo" style="color: var(--color-primary); font-weight: bold;">—</span>
+                            </div>
+                            <div class="result-item">
                                 <label>Waktu Setor</label>
                                 <span id="res-created">—</span>
                             </div>

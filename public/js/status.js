@@ -57,6 +57,8 @@ if (formCek) {
                 document.getElementById('res-nama').textContent = d.nama;
                 document.getElementById('res-jenis').textContent = d.jenis_sampah;
                 document.getElementById('res-berat').textContent = d.berat + ' kg';
+                document.getElementById('res-saldo').textContent = d.total_saldo + ' kg';
+                document.getElementById('res-created').textContent = d.created_at;
                 document.getElementById('res-keterangan').textContent = d.keterangan || '–';
 
                 const badgeEl = document.getElementById('res-status');

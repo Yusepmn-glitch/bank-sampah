@@ -147,20 +147,44 @@ class SetoranController extends Controller
      */
     public function checkByTicket(Request $request)
     {
-        $request->validate(['kode_tiket' => 'required|string']);
-        $setoran = Setoran::where('kode_tiket', $request->kode_tiket)->first();
+        // Mendukung data dari JSON body maupun form-data
+        $kode_tiket = $request->input('kode_tiket') ?? $request->json('kode_tiket');
+
+        if (!$kode_tiket) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode tiket harus diisi.'
+            ], 422);
+        }
+
+        $setoran = Setoran::where('kode_tiket', $kode_tiket)->first();
 
         if (!$setoran) {
             return response()->json([
                 'success' => false,
-                'message' => 'Kode tiket tidak ditemukan'
+                'message' => 'Kode tiket tidak ditemukan.'
             ], 404);
         }
 
+        // Hitung total saldo (total berat) untuk nama yang sama
+        $total_saldo = Setoran::where('nama', $setoran->nama)
+            ->where('status', '!=', 'Ditolak')
+            ->sum('berat');
+
         return response()->json([
             'success' => true,
-            'message' => 'Data setoran ditemukan',
-            'data' => $setoran
+            'message' => 'Data ditemukan.',
+            'data' => [
+                'id' => $setoran->id,
+                'kode_tiket' => $setoran->kode_tiket,
+                'nama' => $setoran->nama,
+                'jenis_sampah' => $setoran->jenis_sampah,
+                'berat' => $setoran->berat,
+                'keterangan' => $setoran->keterangan,
+                'status' => $setoran->status,
+                'created_at' => $setoran->created_at->format('d M Y H:i'),
+                'total_saldo' => $total_saldo
+            ]
         ]);
     }
 }
